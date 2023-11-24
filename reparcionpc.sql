@@ -80,13 +80,13 @@ GO
 ----------mantenimiento de tablas----------
 
 --agregar usuarios 
-CREATE PROCEDURE agragarUsuario
+CREATE PROCEDURE agregarUsuario
 	@nombre VARCHAR(50),
 	@correo VARCHAR(50),
 	@telefono INT = 0
 AS 
 BEGIN
-	INSERT INTO usuarios (nombre, correo, telefono) VALUES (@nombre, @correo,@telefono)
+	INSERT INTO usuarios (nombre, correo, telefono) VALUES (@nombre, @correo, @telefono)
 END;
 GO
 
@@ -211,3 +211,5 @@ BEGIN
 	DELETE tecnicos WHERE id = @id
 END
 GO
+
+exec agregarUsuario 'Sebastian', 'sebas@gmail.com', 12345678

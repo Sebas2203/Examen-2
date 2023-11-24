@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\gridview.css" />
     <Content Include="css\style.css" />
     <Content Include="css\style2.css" />
     <Content Include="database\reparcionpc.sql" />
@@ -78,6 +79,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="classes\DBconn.cs" />
     <Compile Include="classes\Equipos.cs" />
     <Compile Include="classes\Tecnicos.cs" />
     <Compile Include="classes\Usuarios.cs" />
