@@ -128,11 +128,12 @@ GO
 
 --agregar equipo 
 CREATE PROCEDURE agregarEquipo
+	@idUsuario INT,
 	@tipoEquipo VARCHAR(50),
 	@modelo Varchar(50)
 AS
 BEGIN
-	INSERT INTO equipos (tipoEquipo, modelo) VALUES (@tipoEquipo, @modelo)
+	INSERT INTO equipos (idUsuarios,tipoEquipo, modelo) VALUES (@idUsuario, @tipoEquipo, @modelo)
 END
 GO
 
@@ -148,12 +149,14 @@ GO
 --modificar equipo
 CREATE PROCEDURE modificarEquipo
 	@id INT,
+	@idUsuario INT,
 	@tipoEquipo VARCHAR(50),
 	@modelo VARCHAR(50)
 AS
 BEGIN
 	UPDATE equipos 
 	SET tipoEquipo = @tipoEquipo,
+		idUsuarios = @idUsuario,
 		modelo = @modelo
 		WHERE id = @id
 END

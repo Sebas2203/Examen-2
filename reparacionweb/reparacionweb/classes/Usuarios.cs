@@ -111,6 +111,7 @@ namespace reparacionweb.classes
 
             return retorno;
         }
+
         public static int Consultar(int id)
         {
             int retorno = 0;
@@ -126,15 +127,32 @@ namespace reparacionweb.classes
                     };
                     cmd.Parameters.Add(new SqlParameter("@id", id));
 
-                    retorno = cmd.ExecuteNonQuery();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                string nombre = reader["nombre"].ToString();
+                            }
+
+                            retorno = 1;
+                        }
+                        else
+                        {
+                            retorno = 0;
+                        }
+                    }
                 }
             }
             catch (System.Data.SqlClient.SqlException ex)
             {
                 retorno = -1;
-
             }
-            finally { Conn.Close(); }
+            finally
+            {
+                Conn.Close();
+            }
 
             return retorno;
         }

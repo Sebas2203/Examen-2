@@ -80,13 +80,13 @@ GO
 ----------mantenimiento de tablas----------
 
 --agregar usuarios 
-CREATE PROCEDURE agragarUsuario
+CREATE PROCEDURE agregarUsuario
 	@nombre VARCHAR(50),
 	@correo VARCHAR(50),
 	@telefono INT = 0
 AS 
 BEGIN
-	INSERT INTO usuarios (nombre, correo, telefono) VALUES (@nombre, @correo,@telefono)
+	INSERT INTO usuarios (nombre, correo, telefono) VALUES (@nombre, @correo, @telefono)
 END;
 GO
 
@@ -128,11 +128,12 @@ GO
 
 --agregar equipo 
 CREATE PROCEDURE agregarEquipo
+	@idUsuario INT,
 	@tipoEquipo VARCHAR(50),
 	@modelo Varchar(50)
 AS
 BEGIN
-	INSERT INTO equipos (tipoEquipo, modelo) VALUES (@tipoEquipo, @modelo)
+	INSERT INTO equipos (idUsuarios,tipoEquipo, modelo) VALUES (@idUsuario, @tipoEquipo, @modelo)
 END
 GO
 
@@ -148,12 +149,14 @@ GO
 --modificar equipo
 CREATE PROCEDURE modificarEquipo
 	@id INT,
+	@idUsuario INT,
 	@tipoEquipo VARCHAR(50),
 	@modelo VARCHAR(50)
 AS
 BEGIN
 	UPDATE equipos 
 	SET tipoEquipo = @tipoEquipo,
+		idUsuarios = @idUsuario,
 		modelo = @modelo
 		WHERE id = @id
 END
@@ -211,3 +214,5 @@ BEGIN
 	DELETE tecnicos WHERE id = @id
 END
 GO
+
+exec agregarUsuario 'Sebastian', 'sebas@gmail.com', 12345678

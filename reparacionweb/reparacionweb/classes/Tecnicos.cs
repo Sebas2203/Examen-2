@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -20,21 +21,136 @@ namespace reparacionweb.classes
 
         public Tecnicos() { }
 
-        public void AgregarTecnico()
+        public static int Agregar(string nombre, string especialidad)
         {
+            int retorno = 0;
 
+            SqlConnection Conn = new SqlConnection();
+            try
+            {
+                using (Conn = DBconn.obtenerConexion())
+                {
+                    SqlCommand cmd = new SqlCommand("agregarTecnico", Conn)
+                    {
+                        CommandType = System.Data.CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.Add(new SqlParameter("@nombre", nombre));
+                    cmd.Parameters.Add(new SqlParameter("@especialidad", especialidad));
+
+                    retorno = cmd.ExecuteNonQuery();
+                }
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                retorno = -1;
+
+            }
+            finally { Conn.Close(); }
+
+            return retorno;
         }
-        public void ConsultarTecnico()
-        {
 
+        public static int Borrar(int id)
+        {
+            int retorno = 0;
+
+            SqlConnection Conn = new SqlConnection();
+            try
+            {
+                using (Conn = DBconn.obtenerConexion())
+                {
+                    SqlCommand cmd = new SqlCommand("borrarTecnico", Conn)
+                    {
+                        CommandType = System.Data.CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+
+                    retorno = cmd.ExecuteNonQuery();
+                }
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                retorno = -1;
+
+            }
+            finally { Conn.Close(); }
+
+            return retorno;
         }
-        public void ModificarTecnico()
-        {
 
+        public static int Modificar(int id, string nombre, string especialidad)
+        {
+            int retorno = 0;
+
+            SqlConnection Conn = new SqlConnection();
+            try
+            {
+                using (Conn = DBconn.obtenerConexion())
+                {
+                    SqlCommand cmd = new SqlCommand("modificarTecnicos", Conn)
+                    {
+                        CommandType = System.Data.CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+                    cmd.Parameters.Add(new SqlParameter("@nombre", nombre));
+                    cmd.Parameters.Add(new SqlParameter("@especialidad", especialidad));
+
+                    retorno = cmd.ExecuteNonQuery();
+                }
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                retorno = -1;
+
+            }
+            finally { Conn.Close(); }
+
+            return retorno;
         }
-        public void BorrarTecnico()
-        {
 
+        public static int Consultar(int id)
+        {
+            int retorno = 0;
+
+            SqlConnection Conn = new SqlConnection();
+            try
+            {
+                using (Conn = DBconn.obtenerConexion())
+                {
+                    SqlCommand cmd = new SqlCommand("consultarTecnico", Conn)
+                    {
+                        CommandType = System.Data.CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.Add(new SqlParameter("@id", id));
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                string nombre = reader["nombre"].ToString();
+                            }
+
+                            retorno = 1;
+                        }
+                        else
+                        {
+                            retorno = 0;
+                        }
+                    }
+                }
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                retorno = -1;
+            }
+            finally
+            {
+                Conn.Close();
+            }
+
+            return retorno;
         }
     }
 
