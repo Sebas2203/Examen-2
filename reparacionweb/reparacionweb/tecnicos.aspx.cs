@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using reparacionweb.classes;
 
 namespace reparacionweb
 {
@@ -95,14 +96,24 @@ namespace reparacionweb
 
         protected void button4_Click(object sender, EventArgs e)
         {
-            if (classes.Tecnicos.Consultar(int.Parse(tid.Text)) > 0)
+            int codigo = int.Parse(tid.Text);
+            string constr = ConfigurationManager.ConnectionStrings["Conexion"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
             {
-                LlenarGrid();
-                alertas("Técnico consultado con exito");
-            }
-            else
-            {
-                alertas("Error al consultar técnico");
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM tecnicos WHERE id ='" + codigo + "'"))
+
+
+                using (SqlDataAdapter sda = new SqlDataAdapter())
+                {
+                    cmd.Connection = con;
+                    sda.SelectCommand = cmd;
+                    using (DataTable dt = new DataTable())
+                    {
+                        sda.Fill(dt);
+                        datagrid.DataSource = dt;
+                        datagrid.DataBind();  // actualizar el grid view
+                    }
+                }
             }
         }
     }

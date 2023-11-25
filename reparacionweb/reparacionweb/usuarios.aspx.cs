@@ -84,7 +84,7 @@ namespace reparacionweb
 
         protected void button3_Click(object sender, EventArgs e)
         {
-            if (classes.Usuarios.Modificar(int.Parse(tid.Text), tnombre.Text, tcorreo.Text, int.Parse(ttelefono.Text)) > 0)
+            if (classes.Usuarios.Modificar(int.Parse(tid.Text), tnombre.Text, tcorreo.Text, int.Parse(ttelefono.Text)) != 0)
             {
                 LlenarGrid();
                 alertas("Usuario modificado con exito");
@@ -97,14 +97,24 @@ namespace reparacionweb
 
         protected void button4_Click(object sender, EventArgs e)
         {
-            if (classes.Usuarios.Consultar(int.Parse(tid.Text)) > 0)
+            int codigo = int.Parse(tid.Text);
+            string constr = ConfigurationManager.ConnectionStrings["Conexion"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
             {
-                LlenarGrid();
-                alertas("Usuario consultado con exito");
-            }
-            else
-            {
-                alertas("Error al consultar usuario");
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM usuarios WHERE id ='" + codigo + "'"))
+
+
+                using (SqlDataAdapter sda = new SqlDataAdapter())
+                {
+                    cmd.Connection = con;
+                    sda.SelectCommand = cmd;
+                    using (DataTable dt = new DataTable())
+                    {
+                        sda.Fill(dt);
+                        datagrid.DataSource = dt;
+                        datagrid.DataBind();  // actualizar el grid view
+                    }
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -121,38 +122,20 @@ namespace reparacionweb.classes
             {
                 using (Conn = DBconn.obtenerConexion())
                 {
-                    SqlCommand cmd = new SqlCommand("consultarUsuario", Conn)
+                    SqlCommand cmd = new SqlCommand("ConsultarUsuario", Conn)
                     {
                         CommandType = System.Data.CommandType.StoredProcedure
                     };
                     cmd.Parameters.Add(new SqlParameter("@id", id));
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                string nombre = reader["nombre"].ToString();
-                            }
-
-                            retorno = 1;
-                        }
-                        else
-                        {
-                            retorno = 0;
-                        }
-                    }
+                    retorno = cmd.ExecuteNonQuery();
                 }
             }
             catch (System.Data.SqlClient.SqlException ex)
             {
                 retorno = -1;
+
             }
-            finally
-            {
-                Conn.Close();
-            }
+            finally { Conn.Close(); }
 
             return retorno;
         }

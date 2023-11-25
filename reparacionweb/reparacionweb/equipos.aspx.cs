@@ -123,14 +123,24 @@ namespace reparacionweb
 
         protected void button4_Click(object sender, EventArgs e)
         {
-            if (classes.Equipos.Consultar(int.Parse(tid.Text)) > 0)
+            int codigo = int.Parse(tid.Text);
+            string constr = ConfigurationManager.ConnectionStrings["Conexion"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
             {
-                LlenarGrid();
-                alertas("Equipos consultado con exito");
-            }
-            else
-            {
-                alertas("Error al consultar Equipos");
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM equipos WHERE id ='" + codigo + "'"))
+
+
+                using (SqlDataAdapter sda = new SqlDataAdapter())
+                {
+                    cmd.Connection = con;
+                    sda.SelectCommand = cmd;
+                    using (DataTable dt = new DataTable())
+                    {
+                        sda.Fill(dt);
+                        datagrid.DataSource = dt;
+                        datagrid.DataBind();  // actualizar el grid view
+                    }
+                }
             }
         }
     }
