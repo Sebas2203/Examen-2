@@ -12,7 +12,8 @@ CREATE TABLE usuarios
 	id INT IDENTITY(1,1),
 	nombre VARCHAR(50) NOT NULL,
 	correo VARCHAR(50) NOT NULL,
-	telefono INT DEFAULT 0,
+	telefono INT DEFAULT 0
+
 	CONSTRAINT pk_idUsuarios PRIMARY KEY (id)
 )
 GO
@@ -22,7 +23,8 @@ CREATE TABLE tecnicos
 (
 	id INT IDENTITY(1,1),
 	nombre VARCHAR(50) NOT NULL,
-	especialidad VARCHAR(50) NOT NULL,
+	especialidad VARCHAR(50) NOT NULL
+
 	CONSTRAINT pk_idTecnicos PRIMARY KEY (id)
 )
 GO
@@ -33,7 +35,8 @@ CREATE TABLE equipos
 	id INT IDENTITY(1,1),
 	idUsuarios INT,
 	tipoEquipo VARCHAR(100) NOT NULL,
-	modelo VARCHAR(50) NOT NULL,
+	modelo VARCHAR(50) NOT NULL
+
 	CONSTRAINT pk_idEquipos PRIMARY KEY (id),
 	CONSTRAINT FK_idUsuarios FOREIGN KEY (idUsuarios) REFERENCES usuarios(id)
 )
@@ -45,7 +48,8 @@ CREATE TABLE reparaciones
 	id INT IDENTITY(1,1),
 	idEquipo INT,
 	fechaSolicitud DATETIME CONSTRAINT fs_fechaSolicitud DEFAULT GETDATE(),
-	estado VARCHAR(50) NOT NULL,
+	estado VARCHAR(50) NOT NULL
+
 	CONSTRAINT pk_reparaciones PRIMARY KEY (id),
 	CONSTRAINT fk_idEquipo FOREIGN KEY (idEquipo) REFERENCES equipos(id)
 )
@@ -57,7 +61,8 @@ CREATE TABLE asignaciones
 	id INT IDENTITY(1,1),
 	idReparacionesAsignaciones INT,
 	idTecnicos INT,
-	fechaAsignacion DATETIME CONSTRAINT fa_fechaAsignacion DEFAULT GETDATE(),
+	fechaAsignacion DATETIME CONSTRAINT fa_fechaAsignacion DEFAULT GETDATE()
+
 	CONSTRAINT pk_asignaciones PRIMARY KEY (id),
 	CONSTRAINT fk_idReparacionesAsignaciones FOREIGN KEY(idReparacionesAsignaciones) REFERENCES reparaciones(id),
 	CONSTRAINT fk_idTecnicos FOREIGN KEY(idTecnicos) REFERENCES tecnicos(id)
@@ -71,7 +76,8 @@ CREATE TABLE detallesReparacion
 	idReparaciones INT,
 	descripcion VARCHAR(100) NOT NULL,
 	fechaInicio DATETIME CONSTRAINT fi_fechaInicio DEFAULT GETDATE(),
-	fechaFin DATETIME CONSTRAINT ff_fechaFinal DEFAULT GETDATE(),
+	fechaFin DATETIME CONSTRAINT ff_fechaFinal DEFAULT GETDATE()
+
 	CONSTRAINT pk_idDetallesReparaciones PRIMARY KEY (id),
 	CONSTRAINT fk_idReparaciones FOREIGN KEY(idReparaciones) REFERENCES reparaciones(id)
 )
@@ -126,6 +132,51 @@ GO
 
 -------------------
 
+--agregar tecnico
+CREATE PROCEDURE agregarTecnico
+	@nombre VARCHAR(50),
+	@especialidad Varchar(50)
+AS
+BEGIN
+	INSERT INTO tecnicos(nombre, especialidad) VALUES (@nombre, @especialidad)
+END
+GO
+
+--consultar tecnico
+CREATE PROCEDURE consultarTecnico
+	@id INT
+AS
+BEGIN
+	SELECT*FROM tecnicos WHERE id = @id
+END
+GO
+
+--modificar tecnico
+CREATE PROCEDURE modificarTecnico
+	@id INT,
+	@nombre VARCHAR(50),
+	@especialidad VARCHAR(50)
+AS
+BEGIN
+	UPDATE tecnicos
+	SET nombre = @nombre,
+		especialidad = @especialidad
+		WHERE id = @id
+END
+GO
+
+--borrar tecnico
+CREATE PROCEDURE borrarTecnico
+	@id INT
+AS 
+BEGIN
+	DELETE tecnicos WHERE id = @id
+END
+GO
+
+
+-------------------
+
 --agregar equipo 
 CREATE PROCEDURE agregarEquipo
 	@idUsuario INT,
@@ -170,49 +221,3 @@ BEGIN
 	DELETE equipos WHERE id = @id
 END
 GO
-
--------------------
-
---agregar tecnico
-CREATE PROCEDURE agregarTecnico
-	@nombre VARCHAR(50),
-	@especialidad Varchar(50)
-AS
-BEGIN
-	INSERT INTO tecnicos(nombre, especialidad) VALUES (@nombre, @especialidad)
-END
-GO
-
---consultar equipo
-CREATE PROCEDURE consultarTecnico
-	@id INT
-AS
-BEGIN
-	SELECT*FROM tecnicos WHERE id = @id
-END
-GO
-
---modificar equipo
-CREATE PROCEDURE modificarTecnico
-	@id INT,
-	@nombre VARCHAR(50),
-	@especialidad VARCHAR(50)
-AS
-BEGIN
-	UPDATE tecnicos
-	SET nombre = @nombre,
-		especialidad = @especialidad
-		WHERE id = @id
-END
-GO
-
---borrar equipo
-CREATE PROCEDURE borrarTecnico
-	@id INT
-AS 
-BEGIN
-	DELETE tecnicos WHERE id = @id
-END
-GO
-
-exec agregarUsuario 'Sebastian', 'sebas@gmail.com', 12345678

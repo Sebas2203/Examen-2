@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -25,7 +26,7 @@ namespace reparacionweb.classes
         {
         }
 
-        public static int Agregar(int idUsuarios, string tipoEquipo, string modelo)
+        public static int Agregar(int idUsuario, string tipoEquipo, string modelo)
         {
             int retorno = 0;
 
@@ -36,9 +37,9 @@ namespace reparacionweb.classes
                 {
                     SqlCommand cmd = new SqlCommand("agregarEquipo", Conn)
                     {
-                        CommandType = System.Data.CommandType.StoredProcedure
+                        CommandType = CommandType.StoredProcedure
                     };
-                    cmd.Parameters.Add(new SqlParameter("@idUsuarios", idUsuarios));
+                    cmd.Parameters.Add(new SqlParameter("@idUsuario", idUsuario));
                     cmd.Parameters.Add(new SqlParameter("@tipoEquipo", tipoEquipo));
                     cmd.Parameters.Add(new SqlParameter("@modelo", modelo));
 
@@ -48,11 +49,14 @@ namespace reparacionweb.classes
             catch (System.Data.SqlClient.SqlException ex)
             {
                 retorno = -1;
-
             }
-            finally { Conn.Close(); }
+            finally
+            {
+                Conn.Close();
+            }
 
             return retorno;
+
         }
 
         public static int Borrar(int id)

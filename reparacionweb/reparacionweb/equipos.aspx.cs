@@ -40,7 +40,7 @@ namespace reparacionweb
             string constr = ConfigurationManager.ConnectionStrings["Conexion"].ConnectionString;
             using (SqlConnection con = new SqlConnection(constr))
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT *  FROM equipos"))
+                using (SqlCommand cmd = new SqlCommand("SELECT*FROM equipos"))
                 {
                     using (SqlDataAdapter sda = new SqlDataAdapter())
                     {
@@ -84,7 +84,7 @@ namespace reparacionweb
 
         protected void button1_Click(object sender, EventArgs e)
         {
-            if (classes.Equipos.Agregar(int.Parse(tidUsuario.SelectedValue), ttipoEquipo.Text, tmodelo.Text) > 0)
+            if (classes.Equipos.Agregar(int.Parse(tidUsuario.SelectedValue), ttipoEquipo.Text, tmodelo.Text) != 0)
             {
                 LlenarGrid();
                 alertas("Equipo ingresado con exito");

@@ -30,7 +30,9 @@
     <asp:TextBox ID="tmodelo" class="form-control" runat="server"></asp:TextBox>
 </div>
 <div class="container text-center">
-
+    <br />
+    <br />
+    <br />
     <asp:Button ID="button1" class="btn btn-outline-primary" runat="server" Text="Agregar" OnClick="button1_Click" />
     <asp:Button ID="button2" class="btn btn-outline-secondary" runat="server" Text="Borrar" OnClick="button2_Click" />
     <asp:Button ID="button3" runat="server" class="btn btn-outline-danger" Text="Modificar" OnClick="button3_Click" />
